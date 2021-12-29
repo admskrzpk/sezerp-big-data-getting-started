@@ -1,3 +1,5 @@
 package com.pawelzabczynski.config
 
-case class Config()
+import com.pawelzabczynski.http.HttpConfig
+
+case class Config(webApp: HttpConfig)

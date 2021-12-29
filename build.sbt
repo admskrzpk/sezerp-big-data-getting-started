@@ -9,12 +9,21 @@ dependencyDotFile := file("dependencies.dot") //render dot file to `./dependenci
 
 val SparkV   = "3.2.0"
 val KafkaV   = ""
-val CirceV   = ""
+val CirceV   = "0.13.0"
 val AkkaV    = "2.6.8"
 val AkkaHttp = "10.2.7"
+val TapirV   = "0.17.19"
+val SttpV    = "3.3.4"
+val Http4sV  = "0.21.23"
+val TsecV    = "0.2.1"
 
 val configDeps = Seq(
   "com.github.pureconfig" %% "pureconfig" % "0.17.1"
+)
+
+val unitTestingStack = Seq(
+  "org.scalatest" %% "scalatest" % "3.1.1" % Test,
+  "org.scalamock" %% "scalamock" % "4.4.0" % Test
 )
 
 val loggingDeps = Seq(
@@ -36,9 +45,30 @@ val sparkDeps = Seq("org.apache.spark" %% "spark-core" % SparkV).map(
   )
 )
 
-val webDeps = Seq()
+val webDeps = Seq(
+  "com.softwaremill.sttp.tapir"   %% "tapir-openapi-docs"              % TapirV,
+  "com.softwaremill.sttp.tapir"   %% "tapir-openapi-circe-yaml"        % TapirV,
+  "com.softwaremill.sttp.tapir"   %% "tapir-swagger-ui-http4s"         % TapirV,
+  "io.monix"                      %% "monix"                           % "3.4.0",
+  "com.softwaremill.common"       %% "tagging"                         % "2.2.1",
+  "io.circe"                      %% "circe-core"                      % CirceV,
+  "io.circe"                      %% "circe-generic"                   % CirceV,
+  "io.circe"                      %% "circe-parser"                    % CirceV,
+  "com.softwaremill.sttp.tapir"   %% "tapir-json-circe"                % TapirV,
+  "com.softwaremill.sttp.client3" %% "circe"                           % SttpV,
+  "org.http4s"                    %% "http4s-dsl"                      % Http4sV,
+  "org.http4s"                    %% "http4s-blaze-server"             % Http4sV,
+  "org.http4s"                    %% "http4s-blaze-client"             % Http4sV,
+  "org.http4s"                    %% "http4s-circe"                    % Http4sV,
+  "org.http4s"                    %% "http4s-prometheus-metrics"       % Http4sV,
+  "com.softwaremill.sttp.client3" %% "async-http-client-backend-monix" % SttpV,
+  "com.softwaremill.sttp.tapir"   %% "tapir-http4s-server"             % TapirV,
+  "com.softwaremill.sttp.client3" %% "slf4j-backend"                   % SttpV,
+  "io.github.jmcardon"            %% "tsec-password"                   % TsecV,
+  "io.github.jmcardon"            %% "tsec-cipher-jca"                 % TsecV
+)
 
-val commonDependencies = configDeps ++ loggingDeps
+val commonDependencies = configDeps ++ loggingDeps ++ unitTestingStack
 
 lazy val commonSettings = commonSmlBuildSettings ++ Seq(
   organization := "com.pawelzabczynski",
