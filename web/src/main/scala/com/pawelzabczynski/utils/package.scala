@@ -6,12 +6,11 @@ import monix.eval.Task
 import sttp.tapir.server.ServerEndpoint
 import tsec.common.SecureRandomId
 
-
 package object utils {
-  type Id  = SecureRandomId
+  type Id = SecureRandomId
 
   implicit class RichString(val s: String) extends AnyVal {
-    def asId[T]: Id @@ T                 = s.asInstanceOf[Id @@ T]
+    def asId[T]: Id @@ T = s.asInstanceOf[Id @@ T]
   }
 
   type ServerEndpoints = NonEmptyList[ServerEndpoint[_, _, _, Any, Task]]

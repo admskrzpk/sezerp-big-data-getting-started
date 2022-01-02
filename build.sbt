@@ -45,12 +45,15 @@ val sparkDeps = Seq("org.apache.spark" %% "spark-core" % SparkV).map(
   )
 )
 
+val coreDeps = Seq(
+  "io.monix"                      %% "monix"                           % "3.4.0",
+  "com.softwaremill.common"       %% "tagging"                         % "2.2.1",
+)
+
 val webDeps = Seq(
   "com.softwaremill.sttp.tapir"   %% "tapir-openapi-docs"              % TapirV,
   "com.softwaremill.sttp.tapir"   %% "tapir-openapi-circe-yaml"        % TapirV,
   "com.softwaremill.sttp.tapir"   %% "tapir-swagger-ui-http4s"         % TapirV,
-  "io.monix"                      %% "monix"                           % "3.4.0",
-  "com.softwaremill.common"       %% "tagging"                         % "2.2.1",
   "io.circe"                      %% "circe-core"                      % CirceV,
   "io.circe"                      %% "circe-generic"                   % CirceV,
   "io.circe"                      %% "circe-parser"                    % CirceV,
@@ -68,7 +71,7 @@ val webDeps = Seq(
   "io.github.jmcardon"            %% "tsec-cipher-jca"                 % TsecV
 )
 
-val commonDependencies = configDeps ++ loggingDeps ++ unitTestingStack
+val commonDependencies = configDeps ++ loggingDeps ++ unitTestingStack ++ coreDeps
 
 lazy val commonSettings = commonSmlBuildSettings ++ Seq(
   organization := "com.pawelzabczynski",
