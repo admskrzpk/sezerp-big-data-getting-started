@@ -13,6 +13,8 @@ trait ConfigModule extends StrictLogging {
       s"""
          |Web app configuration:
          |------------------------
+         |host: ${config.webApp.host}
+         |port: ${config.webApp.port}
          |""".stripMargin
 
     logger.info(baseInfo)
