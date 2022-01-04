@@ -16,6 +16,7 @@ val TapirV   = "0.17.19"
 val SttpV    = "3.3.4"
 val Http4sV  = "0.21.23"
 val TsecV    = "0.2.1"
+val DoobieV  = "0.13.3"
 
 val configDeps = Seq(
   "com.github.pureconfig" %% "pureconfig" % "0.17.1"
@@ -46,8 +47,15 @@ val sparkDeps = Seq("org.apache.spark" %% "spark-core" % SparkV).map(
 )
 
 val coreDeps = Seq(
-  "io.monix"                      %% "monix"                           % "3.4.0",
-  "com.softwaremill.common"       %% "tagging"                         % "2.2.1",
+  "io.monix"                %% "monix"      % "3.4.0",
+  "com.softwaremill.common" %% "tagging"    % "2.2.1",
+  "org.postgresql"           % "postgresql" % "42.3.1" // just for migration
+)
+
+val dbDeps = Seq(
+  "org.tpolecat" %% "doobie-core"     % DoobieV,
+  "org.tpolecat" %% "doobie-hikari"   % DoobieV,
+  "org.tpolecat" %% "doobie-postgres" % DoobieV
 )
 
 val webDeps = Seq(
@@ -69,7 +77,7 @@ val webDeps = Seq(
   "com.softwaremill.sttp.client3" %% "slf4j-backend"                   % SttpV,
   "io.github.jmcardon"            %% "tsec-password"                   % TsecV,
   "io.github.jmcardon"            %% "tsec-cipher-jca"                 % TsecV
-)
+) ++ dbDeps
 
 val commonDependencies = configDeps ++ loggingDeps ++ unitTestingStack ++ coreDeps
 
@@ -113,3 +121,10 @@ lazy val web: Project = (project in file("web"))
 lazy val realProject: Project = (project in file("real-project"))
   .settings(commonSettings)
   .settings(Revolver.settings)
+
+// DB migrations
+enablePlugins(FlywayPlugin)
+flywayUrl := "jdbc:postgresql://localhost:5432/iot"
+flywayUser := "postgres"
+flywayPassword := "P@55word"
+flywayLocations += "filesystem:./migrations/db"
