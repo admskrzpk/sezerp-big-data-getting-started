@@ -6,3 +6,4 @@ addSbtPlugin("com.typesafe.sbt"                  % "sbt-native-packager"     % "
 addSbtPlugin("com.typesafe.sbt"                  % "sbt-git"                 % "1.0.1")
 addSbtPlugin("net.virtual-void"                  % "sbt-dependency-graph"    % "0.10.0-RC1")
 addSbtPlugin("org.scalameta"                     % "sbt-scalafmt"            % "2.4.2")
+addSbtPlugin("io.github.davidmweber"             % "flyway-sbt"              % "7.4.0")
