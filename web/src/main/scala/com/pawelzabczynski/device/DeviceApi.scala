@@ -9,11 +9,13 @@ import com.pawelzabczynski.device.DeviceService.Device
 import sttp.tapir.generic.auto._
 import com.pawelzabczynski.utils._
 import com.softwaremill.tagging.@@
+import doobie.Transactor
+import monix.eval.Task
 import sttp.tapir.EndpointInput
 
 import java.time.Instant
 
-class DeviceApi(http: Http, idGenerator: IdGenerator, clock: Clock) {
+class DeviceApi(http: Http, service: DeviceService, idGenerator: IdGenerator, clock: Clock) {
 
   import http._
 
