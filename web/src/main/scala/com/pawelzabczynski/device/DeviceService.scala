@@ -1,6 +1,9 @@
 package com.pawelzabczynski.device
 
-class DeviceService {}
+import doobie.Transactor
+import monix.eval.Task
+
+class DeviceService(xa: Transactor[Task]) {}
 
 object DeviceService {
   case class Device()

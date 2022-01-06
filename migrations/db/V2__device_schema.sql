@@ -1,4 +1,4 @@
-CREATE TABLE "journey"
+CREATE TABLE "devices"
 (
     "id" TEXT NOT NULL,
     "account_id" TEXT NOT NULL,

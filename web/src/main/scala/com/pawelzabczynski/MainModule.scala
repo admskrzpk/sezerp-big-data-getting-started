@@ -11,6 +11,6 @@ trait MainModule extends ConfigModule with BaseModule with DeviceModule {
   override lazy val clock: Clock             = DefaultClock
 
   lazy val http: Http                 = new Http
-  lazy val endpoints: ServerEndpoints = journeyApi.endpoints
+  lazy val endpoints: ServerEndpoints = deviceApi.endpoints
   lazy val httpApi: HttpApi           = new HttpApi(http, endpoints, config.webApp)
 }
