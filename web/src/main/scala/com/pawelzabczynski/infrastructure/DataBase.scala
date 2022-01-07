@@ -13,7 +13,7 @@ class DataBase(config: DataBaseConfig) extends StrictLogging {
 
   val txResource: Resource[Task, Transactor[Task]] = {
     for {
-      connectEC <- doobie.util.ExecutionContexts.fixedThreadPool[Task](config.connectionThreadPoolSize)
+      connectEC  <- doobie.util.ExecutionContexts.fixedThreadPool[Task](config.connectionThreadPoolSize)
       transactEC <- doobie.util.ExecutionContexts.cachedThreadPool[Task]
       xa <- HikariTransactor.newHikariTransactor[Task](
         config.driver,
@@ -28,11 +28,9 @@ class DataBase(config: DataBaseConfig) extends StrictLogging {
   }
 
   private def testConnection(xa: Transactor[Task]): Task[Unit] =
-    (Task {
-      sql"select 1".query[Int].unique.transact(xa)
-    }.void >> Task(logger.info("Database connection test complete"))).onErrorRecoverWith {
-    case e: Exception =>
-      logger.warn("Database not available, waiting 5 seconds to retry...", e)
-      Task.sleep(5.seconds)
-  }
+    (sql"select 1".query[Int].unique.transact(xa).void >> Task(logger.info("Database connection test complete")))
+      .onErrorRecoverWith { case e: Exception =>
+        logger.warn("Database not available, waiting 5 seconds to retry...", e)
+        Task.sleep(5.seconds) >> testConnection(xa)
+      }
 }
