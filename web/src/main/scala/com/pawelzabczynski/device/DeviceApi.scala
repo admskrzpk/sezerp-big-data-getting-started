@@ -23,7 +23,7 @@ class DeviceApi(http: Http, service: DeviceService, idGenerator: IdGenerator, cl
 
   private val getQuery: EndpointInput[Id @@ Device] = query[String]("id").map(_.asInstanceOf[Id @@ Device])(_.asInstanceOf[String])
   private val getDevice = baseEndpoint.get
-  .in(ContextPath)
+    .in(ContextPath)
     .in(getQuery)
     .out(jsonBody[DeviceGetOut])
     .serverLogic { id =>
