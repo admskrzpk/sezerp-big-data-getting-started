@@ -24,7 +24,7 @@ class HttpApi(http: Http, endpoints: ServerEndpoints, config: HttpConfig) {
 
   private val ContextPath                       = "/api/v1"
   private lazy val docsRoutes: HttpRoutes[Task] = toDocsRoutes(endpoints)
-  private lazy val mainRoutes                   = toRoutes(endpoints)
+  lazy val mainRoutes                           = toRoutes(endpoints)
 
   lazy val resources: Resource[Task, Server[Task]] = {
     val app: HttpApp[Task] = Router(

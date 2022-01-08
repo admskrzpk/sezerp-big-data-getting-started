@@ -23,8 +23,9 @@ class AccountService(idGenerator: IdGenerator) {
 
   def update(id: AccountId, maybeName: Option[String]): ConnectionIO[Account] = {
     for {
-      account    <- findOrFail(id)
-      updatedAcc <- AccountModel.update(id, maybeName.fold(account.name)(identity)).map(_ => account)
+      account <- findOrFail(id)
+      name = maybeName.fold(account.name)(identity)
+      updatedAcc <- AccountModel.update(id, name).map(_ => account.copy(name = name))
     } yield updatedAcc
   }
 
