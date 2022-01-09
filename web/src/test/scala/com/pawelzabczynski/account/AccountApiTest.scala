@@ -17,7 +17,6 @@ class AccountApiTest extends TestBase with TestEmbeddedPostgres with Eventually 
 
   import requests._
 
-
   "/account" when {
     "call post with correct data" should {
       "create new account" in {
@@ -32,8 +31,8 @@ class AccountApiTest extends TestBase with TestEmbeddedPostgres with Eventually 
 
     "call get method" should {
       "return existing account" in {
-        val account = createAccount()
-        val response  = accountGet(account.id).shouldDeserializeTo[AccountGetOut]
+        val account  = createAccount()
+        val response = accountGet(account.id).shouldDeserializeTo[AccountGetOut]
 
         response.account.id should fullyMatch regex idPattern
         response.account.name shouldBe account.name
@@ -41,8 +40,8 @@ class AccountApiTest extends TestBase with TestEmbeddedPostgres with Eventually 
 
       "call put method" should {
         "update account name" in {
-          val account = createAccount()
-          val entity = AccountUpdateIn(account.id, Some("New name"))
+          val account    = createAccount()
+          val entity     = AccountUpdateIn(account.id, Some("New name"))
           val updatedAcc = accountUpdate(entity).shouldDeserializeTo[AccountUpdateOut]
 
           updatedAcc.account.id shouldBe account.id
@@ -50,8 +49,8 @@ class AccountApiTest extends TestBase with TestEmbeddedPostgres with Eventually 
         }
 
         "not affect account name as new name is not provided" in {
-          val account = createAccount()
-          val entity = AccountUpdateIn(account.id, None)
+          val account    = createAccount()
+          val entity     = AccountUpdateIn(account.id, None)
           val updatedAcc = accountUpdate(entity).shouldDeserializeTo[AccountUpdateOut]
 
           updatedAcc.account.id shouldBe account.id
@@ -59,7 +58,5 @@ class AccountApiTest extends TestBase with TestEmbeddedPostgres with Eventually 
         }
       }
     }
-
   }
-
 }

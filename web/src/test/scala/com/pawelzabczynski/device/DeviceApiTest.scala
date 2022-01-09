@@ -1,7 +1,7 @@
 package com.pawelzabczynski.device
 
 import com.pawelzabczynski.MainModule
-import com.pawelzabczynski.account.AccountApi.{AccountCreateIn, AccountCreateOut}
+import com.pawelzabczynski.device.DeviceApi.{DeviceCreateIn, DeviceCreateOut, DeviceGetOut}
 import com.pawelzabczynski.test.{TestBase, TestEmbeddedPostgres, TestRequests}
 import doobie.Transactor
 import monix.eval.Task
@@ -16,24 +16,29 @@ class DeviceApiTest extends TestBase with TestEmbeddedPostgres with Eventually {
 
   import requests._
 
-
-  "/account" when {
+  "/device" when {
     "call post with correct data" should {
-      "create new account" in {
-        val data = AccountCreateIn("test account")
+      "create new device related to account" in {
+        val account = createAccount()
+        val device = DeviceCreateIn(account.id, "device 1")
+        val response = deviceCreate(device).shouldDeserializeTo[DeviceCreateOut]
 
-        val result = accountCreate(data).shouldDeserializeTo[AccountCreateOut]
-
-        result.account.id should fullyMatch regex idPattern
-        result.account.name shouldBe data.name
+        response.device.id should fullyMatch regex idPattern
+        response.device.accountId shouldBe account.id
+        response.device.name shouldBe "device 1"
       }
     }
 
     "call get method" should {
-      "" in {
+      "return existing device for given id" in {
+        val account = createAccount()
+        val device = DeviceCreateIn(account.id, "device 1")
+        val deviceResponse = deviceCreate(device).shouldDeserializeTo[DeviceCreateOut]
+        val response = deviceGet(deviceResponse.device.id).shouldDeserializeTo[DeviceGetOut]
 
+        response.device.id shouldBe deviceResponse.device.id
+        response.device.name shouldBe "device 1"
       }
     }
-
   }
 }

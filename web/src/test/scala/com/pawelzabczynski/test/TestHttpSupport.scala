@@ -96,7 +96,6 @@ trait TestHttpSupport extends Http4sDsl[Task] with Matchers {
         .get
   }
 
-
 }
 
 case class UrlParam(name: String, value: String)

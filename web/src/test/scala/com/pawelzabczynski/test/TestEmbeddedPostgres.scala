@@ -8,9 +8,9 @@ import org.postgresql.jdbc.PgConnection
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite}
 
 trait TestEmbeddedPostgres extends BeforeAndAfterEach with BeforeAndAfterAll with StrictLogging { self: Suite =>
-  private var postgres: EmbeddedPostgres = _
-  private var currentDbConfig: DataBaseConfig  = _
-  var currentDb: TestDataBase                  = _
+  private var postgres: EmbeddedPostgres      = _
+  private var currentDbConfig: DataBaseConfig = _
+  var currentDb: TestDataBase                 = _
 
   override protected def beforeAll(): Unit = {
     super.beforeAll()

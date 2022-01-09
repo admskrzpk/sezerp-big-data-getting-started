@@ -1,21 +1,21 @@
 package com.pawelzabczynski.device
 
 import cats.data.NonEmptyList
+import com.pawelzabczynski.account.Account
 import com.pawelzabczynski.http.Http
-import com.pawelzabczynski.utils.{Clock, IdGenerator, ServerEndpoints}
+import com.pawelzabczynski.utils.ServerEndpoints
 import com.pawelzabczynski.device.DeviceApi._
 import com.pawelzabczynski.infrastructure.JsonSupport._
-import com.pawelzabczynski.device.DeviceService.Device
 import sttp.tapir.generic.auto._
 import com.pawelzabczynski.utils._
 import com.softwaremill.tagging.@@
 import doobie.Transactor
 import monix.eval.Task
 import sttp.tapir.EndpointInput
+import com.pawelzabczynski.infrastructure.Doobie._
 
-import java.time.Instant
 
-class DeviceApi(http: Http, service: DeviceService, idGenerator: IdGenerator, clock: Clock) {
+class DeviceApi(http: Http, service: DeviceService, xa: Transactor[Task]) {
 
   import http._
 
@@ -28,20 +28,18 @@ class DeviceApi(http: Http, service: DeviceService, idGenerator: IdGenerator, cl
     .out(jsonBody[DeviceGetOut])
     .serverLogic { id =>
       (for {
-        now <- clock.now()
-        _ = println(id)
-      } yield DeviceGetOut()).toOut
+        device <- service.get(id).transact(xa)
+      } yield DeviceGetOut(device)).toOut
     }
 
   private val createDevice = baseEndpoint.post
     .in(ContextPath)
     .in(jsonBody[DeviceCreateIn])
     .out(jsonBody[DeviceCreateOut])
-    .serverLogic { case _ =>
+    .serverLogic { case entity =>
       (for {
-        id  <- idGenerator.nextId[Device]()
-        now <- clock.now()
-      } yield DeviceCreateOut(id, now)).toOut
+        device <- service.create(entity).transact(xa)
+      } yield DeviceCreateOut(device)).toOut
     }
 
   val endpoints: ServerEndpoints = NonEmptyList.of(getDevice, createDevice).map(_.tag("device"))
@@ -49,9 +47,9 @@ class DeviceApi(http: Http, service: DeviceService, idGenerator: IdGenerator, cl
 }
 
 object DeviceApi {
-  case class DeviceCreateIn()
-  case class DeviceCreateOut(requestId: Id @@ Device, at: Instant)
+  case class DeviceCreateIn(accountId: Id @@ Account, name: String)
+  case class DeviceCreateOut(device: Device)
 
-  case class DeviceGetOut()
+  case class DeviceGetOut(device: Device)
 
 }
