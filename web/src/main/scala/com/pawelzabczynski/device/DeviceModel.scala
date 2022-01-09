@@ -17,10 +17,9 @@ object DeviceModel {
     sql"""DELETE FROM devices WHERE account_id = $accountId AND id = $id""".update.run.void
   }
 
+  def findBy(id: Id @@ Device): ConnectionIO[Option[Device]] = {
+    sql"""SELECT id, account_id, name FROM devices WHERE id = $id""".stripMargin.query[Device].option
+  }
 }
 
 case class Device(id: Id @@ Device, accountId: String, name: String)
-object Device {
-  type DeviceId =
-    Id @@ Device // cannot be used whenever tapir is used due to problem during macros expansion which cannot find appropriate decoder/encoder automatically when type alias used
-}

@@ -23,8 +23,11 @@ val configDeps = Seq(
 )
 
 val unitTestingStack = Seq(
-  "org.scalatest" %% "scalatest" % "3.1.1" % Test,
-  "org.scalamock" %% "scalamock" % "4.4.0" % Test
+  "org.scalatest"              %% "scalatest"       % "3.1.1"  % Test,
+  "org.scalamock"              %% "scalamock"       % "4.4.0"  % Test,
+  "com.opentable.components"    % "otj-pg-embedded" % "0.13.3" % Test,
+  "org.flywaydb"                % "flyway-core"     % "6.2.4"  % Test,
+  "com.softwaremill.quicklens" %% "quicklens"       % "1.4.12" % Test
 )
 
 val loggingDeps = Seq(
