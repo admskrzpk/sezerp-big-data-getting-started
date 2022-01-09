@@ -79,7 +79,9 @@ val webDeps = Seq(
   "com.softwaremill.sttp.tapir"   %% "tapir-http4s-server"             % TapirV,
   "com.softwaremill.sttp.client3" %% "slf4j-backend"                   % SttpV,
   "io.github.jmcardon"            %% "tsec-password"                   % TsecV,
-  "io.github.jmcardon"            %% "tsec-cipher-jca"                 % TsecV
+  "io.github.jmcardon"            %% "tsec-cipher-jca"                 % TsecV,
+  "org.apache.kafka"               % "kafka-clients"                   % "2.1.0",
+    "io.monix"                      %% "monix-kafka-10"                  % "1.0.0-RC6"
 ) ++ dbDeps
 
 val commonDependencies = configDeps ++ loggingDeps ++ unitTestingStack ++ coreDeps
