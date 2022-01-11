@@ -17,8 +17,8 @@ object DeviceModel {
     sql"""DELETE FROM devices WHERE account_id = $accountId AND id = $id""".update.run.void
   }
 
-  def findBy(id: Id @@ Device): ConnectionIO[Option[Device]] = {
-    sql"""SELECT id, account_id, name FROM devices WHERE id = $id""".stripMargin.query[Device].option
+  def findBy(accountId: AccountId, id: Id @@ Device): ConnectionIO[Option[Device]] = {
+    sql"""SELECT id, account_id, name FROM devices WHERE account_id = $accountId AND id = $id""".stripMargin.query[Device].option
   }
 }
 

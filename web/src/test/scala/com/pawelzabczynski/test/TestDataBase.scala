@@ -70,6 +70,7 @@ class TestDataBase(config: DataBaseConfig) extends StrictLogging {
 
   def migrate(): Unit = {
     flyway.migrate()
+    ()
   }
 
   def clean(): Unit = {

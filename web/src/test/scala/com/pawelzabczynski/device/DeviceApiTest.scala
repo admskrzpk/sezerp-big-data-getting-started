@@ -2,15 +2,19 @@ package com.pawelzabczynski.device
 
 import com.pawelzabczynski.MainModule
 import com.pawelzabczynski.device.DeviceApi.{DeviceCreateIn, DeviceCreateOut, DeviceGetOut}
-import com.pawelzabczynski.test.{TestBase, TestEmbeddedPostgres, TestRequests}
+import com.pawelzabczynski.test.{TestBase, TestEmbeddedPostgres, TestKafka, TestRequests}
 import doobie.Transactor
 import monix.eval.Task
 import org.scalatest.concurrent.Eventually
 import com.pawelzabczynski.infrastructure.JsonSupport._
+import com.pawelzabczynski.kafka.MessageProducer
 
-class DeviceApiTest extends TestBase with TestEmbeddedPostgres with Eventually {
+
+class DeviceApiTest extends TestBase with TestEmbeddedPostgres with TestKafka with Eventually {
   val mainModule = new MainModule {
     override def xa: Transactor[Task] = currentDb.xa
+
+    override def kafkaProducer: MessageProducer = currentKafkaProducer
   }
   val requests = new TestRequests(mainModule)
 
@@ -34,7 +38,7 @@ class DeviceApiTest extends TestBase with TestEmbeddedPostgres with Eventually {
         val account = createAccount()
         val device = DeviceCreateIn(account.id, "device 1")
         val deviceResponse = deviceCreate(device).shouldDeserializeTo[DeviceCreateOut]
-        val response = deviceGet(deviceResponse.device.id).shouldDeserializeTo[DeviceGetOut]
+        val response = deviceGet(account.id, deviceResponse.device.id).shouldDeserializeTo[DeviceGetOut]
 
         response.device.id shouldBe deviceResponse.device.id
         response.device.name shouldBe "device 1"

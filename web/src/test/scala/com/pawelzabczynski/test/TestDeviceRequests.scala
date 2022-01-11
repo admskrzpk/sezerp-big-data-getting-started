@@ -1,6 +1,7 @@
 package com.pawelzabczynski.test
 
 import com.pawelzabczynski.MainModule
+import com.pawelzabczynski.account.Account
 import com.pawelzabczynski.device.Device
 import com.pawelzabczynski.device.DeviceApi.DeviceCreateIn
 import com.pawelzabczynski.infrastructure.JsonSupport._
@@ -20,8 +21,8 @@ trait TestDeviceRequests { self: TestHttpSupport =>
     modules.httpApi.mainRoutes(request).unwrap
   }
 
-  def deviceGet(id: Id @@ Device): Response[Task] = {
-    val request = Request[Task](method = GET, uri=buildUri("device",List(UrlParam("id", id))))
+  def deviceGet(accountId: Id @@ Account, id: Id @@ Device): Response[Task] = {
+    val request = Request[Task](method = GET, uri = buildUri("device", List(UrlParam("deviceId", id), UrlParam("accountId", accountId))))
 
     modules.httpApi.mainRoutes(request).unwrap
   }

@@ -2,16 +2,20 @@ package com.pawelzabczynski.account
 
 import com.pawelzabczynski.MainModule
 import com.pawelzabczynski.account.AccountApi.{AccountCreateIn, AccountCreateOut, AccountGetOut, AccountUpdateIn, AccountUpdateOut}
-import com.pawelzabczynski.test.{TestBase, TestEmbeddedPostgres, TestRequests}
+import com.pawelzabczynski.test.{TestBase, TestEmbeddedPostgres, TestKafka, TestRequests}
 import doobie.Transactor
 import monix.eval.Task
 import org.scalatest.concurrent.Eventually
 import com.pawelzabczynski.infrastructure.JsonSupport._
+import com.pawelzabczynski.kafka.MessageProducer
 
-class AccountApiTest extends TestBase with TestEmbeddedPostgres with Eventually {
+
+class AccountApiTest extends TestBase with TestEmbeddedPostgres with TestKafka with Eventually {
 
   val mainModule = new MainModule {
     override def xa: Transactor[Task] = currentDb.xa
+
+    override def kafkaProducer: MessageProducer = currentKafkaProducer
   }
   val requests = new TestRequests(mainModule)
 

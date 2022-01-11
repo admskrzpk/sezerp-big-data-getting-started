@@ -28,7 +28,7 @@ final class DeviceMessageSerializer extends KafkaSerializer[KafkaMessage[Device]
     data match {
       case msg: DeviceMessage =>
         val serializedToStr: String = noNullsPrinter.print(msg.asJson)
-        serializedToStr.getBytes(StandardCharsets.UTF_8)
+        serializedToStr.getBytes(StandardCharsets.UTF_8) // charset used by circe.io
     }
   }
 
