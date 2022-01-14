@@ -30,6 +30,6 @@ jobs:
             ~/.coursier
           key: ${{ runner.os }}-sbt-${{ hashFiles('**/build.sbt') }}
 
-      - name: Run tests
+      - name: Run web tests
         id: run-tests
-        run: sbt test
+        run: sbt "project web" test

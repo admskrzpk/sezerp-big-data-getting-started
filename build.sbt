@@ -1,3 +1,5 @@
+import sbt.Keys.testForkedParallel
+
 scalacOptions ++= Seq(
   "-Ywarn-unused-import",
   "-language:postfixOps",
@@ -90,7 +92,8 @@ val commonDependencies = configDeps ++ loggingDeps ++ unitTestingStack ++ coreDe
 lazy val commonSettings = commonSmlBuildSettings ++ Seq(
   organization := "com.pawelzabczynski",
   scalaVersion := "2.13.2",
-  libraryDependencies ++= commonDependencies
+  libraryDependencies ++= commonDependencies,
+  testForkedParallel := false
 )
 
 lazy val rootProject = (project in file("."))
@@ -103,8 +106,7 @@ lazy val rootProject = (project in file("."))
 lazy val spark: Project = (project in file("spark"))
   .settings(
     Compile / mainClass := Some("com.pawelzabczynski.SparkApp"),
-    libraryDependencies ++= sparkDeps,
-    testForkedParallel := false
+    libraryDependencies ++= sparkDeps
   )
   .settings(commonSettings)
   .settings(Revolver.settings)
@@ -120,7 +122,7 @@ lazy val kafka: Project = (project in file("kafka"))
 lazy val web: Project = (project in file("web"))
   .settings(
     Compile / mainClass := Some("com.pawelzabczynski.WebApp"),
-    libraryDependencies ++= webDeps,
+    libraryDependencies ++= webDeps
   )
   .settings(commonSettings)
   .settings(Revolver.settings)
