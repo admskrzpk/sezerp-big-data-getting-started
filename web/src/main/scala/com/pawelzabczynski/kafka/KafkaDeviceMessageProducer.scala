@@ -13,6 +13,8 @@ import monix.kafka.config.Acks
 import org.apache.kafka.clients.producer.{ProducerRecord, RecordMetadata}
 import org.apache.kafka.clients.producer.{KafkaProducer => ApacheKafkaProducer}
 
+import scala.concurrent.duration.DurationInt
+
 class KafkaDeviceMessageProducer(config: KafkaConfig) {
   val producerResources: Resource[Task, MessageProducer] = MessageProducer.apply(config)
 }
@@ -29,7 +31,8 @@ final class MessageProducer(topic: String, producer: KafkaProducer[String, Kafka
   }
 
   def send(key: String, value: KafkaMessage[Device]): Task[Option[RecordMetadata]] = {
-    producer.send(key, value)
+    println(s"$value")
+    producer.send(topic, key, value)
   }
 
   def send(record: ProducerRecord[String, KafkaMessage[Device]]): Task[Option[RecordMetadata]] = {
@@ -56,7 +59,8 @@ object MessageProducer {
       batchSizeInBytes = config.batchSize,
       clientId = config.clientId,
       acks = Acks(config.acks),
-      lingerTime = config.lingerMs
+      lingerTime = config.lingerMs,
+      connectionsMaxIdleTime = 20.minutes
     )
 
     val producer = KafkaProducer[String, KafkaMessage[Device]](producerConf, global)

@@ -28,7 +28,7 @@ val unitTestingStack = Seq(
   "com.opentable.components"    % "otj-pg-embedded" % "0.13.3" % Test,
   "org.flywaydb"                % "flyway-core"     % "6.2.4"  % Test,
   "com.softwaremill.quicklens" %% "quicklens"       % "1.4.12" % Test,
-  "io.github.embeddedkafka"    %% "embedded-kafka"  % "3.0.0"  % Test
+  "io.github.embeddedkafka"    %% "embedded-kafka"  % "3.0.0"
 )
 
 val loggingDeps = Seq(
@@ -82,7 +82,7 @@ val webDeps = Seq(
   "io.github.jmcardon"            %% "tsec-password"                   % TsecV,
   "io.github.jmcardon"            %% "tsec-cipher-jca"                 % TsecV,
   "org.apache.kafka"               % "kafka-clients"                   % "2.1.0",
-  "io.monix"                      %% "monix-kafka-10"                  % "1.0.0-RC6"
+  "io.monix"                      %% "monix-kafka-1x"                  % "1.0.0-RC6"
 ) ++ dbDeps
 
 val commonDependencies = configDeps ++ loggingDeps ++ unitTestingStack ++ coreDeps
@@ -119,7 +119,8 @@ lazy val kafka: Project = (project in file("kafka"))
 lazy val web: Project = (project in file("web"))
   .settings(
     Compile / mainClass := Some("com.pawelzabczynski.WebApp"),
-    libraryDependencies ++= webDeps
+    libraryDependencies ++= webDeps,
+//    dependencyOverrides += "org.apache.kafka" % "kafka-clients" % "2.1.0"
   )
   .settings(commonSettings)
   .settings(Revolver.settings)
