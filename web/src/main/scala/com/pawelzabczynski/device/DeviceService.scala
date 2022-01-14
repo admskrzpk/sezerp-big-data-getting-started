@@ -3,14 +3,15 @@ package com.pawelzabczynski.device
 import cats.implicits.{catsSyntaxApplicativeErrorId, catsSyntaxApplicativeId}
 import com.pawelzabczynski.Fail
 import com.pawelzabczynski.account.{Account, AccountModel}
-import com.pawelzabczynski.device.DeviceApi.DeviceCreateIn
+import com.pawelzabczynski.device.DeviceApi.{DeviceCreateIn, DeviceMessageIn}
+import com.pawelzabczynski.kafka.MessageProducer
 import com.pawelzabczynski.utils.{Clock, Id, IdGenerator}
 import com.softwaremill.tagging.@@
 import doobie.ConnectionIO
 import monix.eval.Task
 import monix.execution.Scheduler.Implicits.global
 
-class DeviceService(idGenerator: IdGenerator, clock: Clock) {
+class DeviceService(kafkaProducer: MessageProducer, idGenerator: IdGenerator, clock: Clock) {
 
   def create(entity: DeviceCreateIn): ConnectionIO[Device] = {
     for {
@@ -21,11 +22,19 @@ class DeviceService(idGenerator: IdGenerator, clock: Clock) {
     } yield device
   }
 
-  def get(id: Id @@ Device): ConnectionIO[Device] = {
+  def get(accountId: Id @@ Account, id: Id @@ Device): ConnectionIO[Device] = {
     for {
-      maybeDevice <- DeviceModel.findBy(id)
+      maybeDevice <- DeviceModel.findBy(accountId, id)
       device      <- maybeDevice.fold(Fail.NotFound("Device").raiseError[ConnectionIO, Device])(_.pure[ConnectionIO])
     } yield device
+  }
+
+  def sendMessage(entity: DeviceMessageIn): ConnectionIO[Unit] = {
+    for {
+      maybeDevice <- DeviceModel.findBy(entity.accountId, entity.message.id)
+      _ <- maybeDevice.fold(Fail.NotFound("Device").raiseError[ConnectionIO, Device])(_.pure[ConnectionIO])
+      _ <- kafkaProducer.send(entity.message.id, entity.message).void.to[ConnectionIO]
+    } yield ()
   }
 
   private def entityToDevice(entity: DeviceCreateIn, accountId: Id @@ Account): Task[Device] = {

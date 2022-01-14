@@ -1,5 +1,6 @@
 package com.pawelzabczynski.kafka
 
-class KafkaModule {
+import com.pawelzabczynski.utils.BaseModule
 
+trait KafkaModule extends BaseModule {
 }
