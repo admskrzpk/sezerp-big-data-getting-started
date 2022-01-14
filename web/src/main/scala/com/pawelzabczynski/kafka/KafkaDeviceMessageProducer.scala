@@ -31,7 +31,6 @@ final class MessageProducer(topic: String, producer: KafkaProducer[String, Kafka
   }
 
   def send(key: String, value: KafkaMessage[Device]): Task[Option[RecordMetadata]] = {
-    println(s"$value")
     producer.send(topic, key, value)
   }
 

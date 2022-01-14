@@ -103,7 +103,8 @@ lazy val rootProject = (project in file("."))
 lazy val spark: Project = (project in file("spark"))
   .settings(
     Compile / mainClass := Some("com.pawelzabczynski.SparkApp"),
-    libraryDependencies ++= sparkDeps
+    libraryDependencies ++= sparkDeps,
+    testForkedParallel := false
   )
   .settings(commonSettings)
   .settings(Revolver.settings)
@@ -120,7 +121,6 @@ lazy val web: Project = (project in file("web"))
   .settings(
     Compile / mainClass := Some("com.pawelzabczynski.WebApp"),
     libraryDependencies ++= webDeps,
-//    dependencyOverrides += "org.apache.kafka" % "kafka-clients" % "2.1.0"
   )
   .settings(commonSettings)
   .settings(Revolver.settings)
