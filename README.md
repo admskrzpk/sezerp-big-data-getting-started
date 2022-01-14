@@ -1,5 +1,6 @@
 # big-data-getting-started
 
+![CI](https://github.com/sezerp/big-data-getting-started/actions/workflows/ci.yml/badge.svg)
 
 Simple project showing commonly used in Big data technologies such as Spark and Kafka. Main goal is to provide 
 simplified project allowing play around kafka, spark and developing api. For simplicity topics such as security has been skipped. 
