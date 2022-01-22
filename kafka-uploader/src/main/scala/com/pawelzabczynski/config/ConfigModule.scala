@@ -12,7 +12,7 @@ trait ConfigModule extends StrictLogging {
       s"""
          |Kafka app configuration:
          |------------------------
-         |name: ${config.kafka.name}
+         |name: ${config.kafkaUploader.name}
          |""".stripMargin
 
     logger.info(baseInfo)

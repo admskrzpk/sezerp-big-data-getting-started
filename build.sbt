@@ -19,6 +19,7 @@ val SttpV    = "3.3.4"
 val Http4sV  = "0.21.23"
 val TsecV    = "0.2.1"
 val DoobieV  = "0.13.3"
+val ZioV     = "1.0.4-2"
 
 val configDeps = Seq(
   "com.github.pureconfig" %% "pureconfig" % "0.17.1"
@@ -87,6 +88,11 @@ val webDeps = Seq(
   "io.monix"                      %% "monix-kafka-1x"                  % "1.0.0-RC6"
 ) ++ dbDeps
 
+val kafkaUploaderDeps = Seq(
+  "dev.zio" %% "zio"       % ZioV,
+  "dev.zio" %% "zio-kafka" % "0.17.1"
+)
+
 val commonDependencies = configDeps ++ loggingDeps ++ unitTestingStack ++ coreDeps
 
 lazy val commonSettings = commonSmlBuildSettings ++ Seq(
@@ -111,7 +117,7 @@ lazy val spark: Project = (project in file("spark"))
   .settings(commonSettings)
   .settings(Revolver.settings)
 
-lazy val kafka: Project = (project in file("kafka"))
+lazy val kafka: Project = (project in file("kafka-uploader"))
   .settings(
     Compile / mainClass := Some("com.pawelzabczynski.KafkaApp"),
     libraryDependencies ++= sparkDeps
