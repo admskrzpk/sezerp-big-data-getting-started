@@ -1,5 +1,6 @@
 package com.pawelzabczynski.utils
 
+import com.pawelzabczynski.commons.models.Id
 import com.softwaremill.tagging._
 import monix.eval.Task
 import tsec.common.SecureRandomId

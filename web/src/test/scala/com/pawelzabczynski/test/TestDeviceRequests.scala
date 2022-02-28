@@ -2,10 +2,10 @@ package com.pawelzabczynski.test
 
 import com.pawelzabczynski.MainModule
 import com.pawelzabczynski.account.Account
-import com.pawelzabczynski.device.Device
+import com.pawelzabczynski.commons.models.Id
+import com.pawelzabczynski.commons.models.web.Device
 import com.pawelzabczynski.device.DeviceApi.{DeviceCreateIn, DeviceMessageIn}
 import com.pawelzabczynski.infrastructure.JsonSupport._
-import com.pawelzabczynski.utils.Id
 import com.softwaremill.tagging.@@
 import monix.eval.Task
 import org.http4s.implicits.http4sLiteralsSyntax

@@ -1,8 +1,7 @@
 package com.pawelzabczynski.commons.models.web
 
+import com.pawelzabczynski.commons.models.Id
 import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
-import com.pawelzabczynski.models.Id
-import com.pawelzabczynski.models.KafkaMessages.KafkaMessage
 import com.softwaremill.tagging.@@
 
 import java.time.Instant

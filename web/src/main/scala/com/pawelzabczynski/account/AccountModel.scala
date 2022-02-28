@@ -1,11 +1,11 @@
 package com.pawelzabczynski.account
 
 import com.pawelzabczynski.account.Account.AccountId
-import com.pawelzabczynski.utils.Id
 import com.softwaremill.tagging.@@
 import doobie.ConnectionIO
 import com.pawelzabczynski.infrastructure.Doobie._
 import cats.syntax.functor._
+import com.pawelzabczynski.commons.models.Id
 
 object AccountModel {
   def insert(a: Account): ConnectionIO[Unit] = {

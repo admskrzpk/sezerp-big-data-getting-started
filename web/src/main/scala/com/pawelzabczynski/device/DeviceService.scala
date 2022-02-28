@@ -3,9 +3,11 @@ package com.pawelzabczynski.device
 import cats.implicits.{catsSyntaxApplicativeErrorId, catsSyntaxApplicativeId}
 import com.pawelzabczynski.Fail
 import com.pawelzabczynski.account.{Account, AccountModel}
+import com.pawelzabczynski.commons.models.Id
+import com.pawelzabczynski.commons.models.web.Device
 import com.pawelzabczynski.device.DeviceApi.{DeviceCreateIn, DeviceMessageIn}
 import com.pawelzabczynski.kafka.MessageProducer
-import com.pawelzabczynski.utils.{Clock, Id, IdGenerator}
+import com.pawelzabczynski.utils.{Clock, IdGenerator}
 import com.softwaremill.tagging.@@
 import doobie.ConnectionIO
 import monix.eval.Task

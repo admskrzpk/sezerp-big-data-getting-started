@@ -2,13 +2,13 @@ package com.pawelzabczynski.kafka
 
 import cats.effect.Resource
 import cats.implicits.catsSyntaxApplicativeId
-import com.pawelzabczynski.device.Device
-import com.pawelzabczynski.kafka.KafkaMessages.KafkaMessage
+import com.pawelzabczynski.commons.models.web.Device
 import monix.eval.Task
 import monix.execution.Scheduler.global
 import monix.kafka.{KafkaProducer, KafkaProducerConfig}
 import monix.kafka.Serializer._
-import com.pawelzabczynski.kafka.KafkaSerializationSupport._
+import com.pawelzabczynski.commons.kafka.KafkaSerializationSupport._
+import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
 import monix.kafka.config.Acks
 import org.apache.kafka.clients.producer.{ProducerRecord, RecordMetadata}
 import org.apache.kafka.clients.producer.{KafkaProducer => ApacheKafkaProducer}

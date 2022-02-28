@@ -3,7 +3,6 @@ package com.pawelzabczynski
 import cats.data.NonEmptyList
 import com.softwaremill.tagging.@@
 import monix.eval.Task
-import sttp.tapir.server.ServerEndpoint
 import tsec.common.SecureRandomId
 
 package object utils {

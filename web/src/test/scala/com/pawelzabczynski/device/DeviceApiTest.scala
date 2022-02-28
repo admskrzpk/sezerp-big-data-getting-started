@@ -8,10 +8,11 @@ import doobie.Transactor
 import monix.eval.Task
 import org.scalatest.concurrent.Eventually
 import com.pawelzabczynski.infrastructure.JsonSupport._
-import com.pawelzabczynski.kafka.KafkaMessages.{DeviceMessage, KafkaMessage}
 import com.pawelzabczynski.kafka.MessageProducer
 import io.github.embeddedkafka.EmbeddedKafka
-import com.pawelzabczynski.kafka.KafkaSerializationSupport._
+import com.pawelzabczynski.commons.kafka.KafkaSerializationSupport._
+import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
+import com.pawelzabczynski.commons.models.web.{Device, DeviceMessage}
 import monix.execution.Scheduler.Implicits.global
 
 import scala.concurrent.duration.DurationInt

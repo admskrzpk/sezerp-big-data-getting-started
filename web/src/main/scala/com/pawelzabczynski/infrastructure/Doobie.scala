@@ -1,6 +1,6 @@
 package com.pawelzabczynski.infrastructure
 
-import com.pawelzabczynski.utils.Id
+import com.pawelzabczynski.commons.models.Id
 import com.softwaremill.tagging.@@
 
 import scala.reflect.runtime.universe.TypeTag

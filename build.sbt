@@ -54,9 +54,11 @@ val sparkDeps = Seq("org.apache.spark" %% "spark-core" % SparkV).map(
 )
 
 val coreDeps = Seq(
-  "io.monix"                %% "monix"      % "3.4.0",
-  "com.softwaremill.common" %% "tagging"    % "2.2.1",
-  "org.postgresql"           % "postgresql" % "42.3.1" // just for migration
+  "io.monix"                %% "monix"           % "3.4.0",
+  "com.softwaremill.common" %% "tagging"         % "2.2.1",
+  "org.postgresql"           % "postgresql"      % "42.3.1", // just for migration
+  "io.github.jmcardon"      %% "tsec-password"   % TsecV,
+  "io.github.jmcardon"      %% "tsec-cipher-jca" % TsecV
 )
 
 val dbDeps = Seq(
@@ -65,13 +67,24 @@ val dbDeps = Seq(
   "org.tpolecat" %% "doobie-postgres" % DoobieV
 )
 
+val jsonDeps = Seq(
+  "io.circe" %% "circe-core"    % CirceV,
+  "io.circe" %% "circe-generic" % CirceV,
+  "io.circe" %% "circe-parser"  % CirceV
+)
+
+val commonDependencies = Seq(
+) ++ configDeps ++ loggingDeps ++ unitTestingStack ++ coreDeps
+
+val kafkaDeps = Seq(
+  "org.apache.kafka" % "kafka-clients"  % "2.1.0",
+  "io.monix"        %% "monix-kafka-1x" % "1.0.0-RC6"
+)
+
 val webDeps = Seq(
   "com.softwaremill.sttp.tapir"   %% "tapir-openapi-docs"              % TapirV,
   "com.softwaremill.sttp.tapir"   %% "tapir-openapi-circe-yaml"        % TapirV,
   "com.softwaremill.sttp.tapir"   %% "tapir-swagger-ui-http4s"         % TapirV,
-  "io.circe"                      %% "circe-core"                      % CirceV,
-  "io.circe"                      %% "circe-generic"                   % CirceV,
-  "io.circe"                      %% "circe-parser"                    % CirceV,
   "com.softwaremill.sttp.tapir"   %% "tapir-json-circe"                % TapirV,
   "com.softwaremill.sttp.client3" %% "circe"                           % SttpV,
   "org.http4s"                    %% "http4s-dsl"                      % Http4sV,
@@ -81,19 +94,12 @@ val webDeps = Seq(
   "org.http4s"                    %% "http4s-prometheus-metrics"       % Http4sV,
   "com.softwaremill.sttp.client3" %% "async-http-client-backend-monix" % SttpV,
   "com.softwaremill.sttp.tapir"   %% "tapir-http4s-server"             % TapirV,
-  "com.softwaremill.sttp.client3" %% "slf4j-backend"                   % SttpV,
-  "io.github.jmcardon"            %% "tsec-password"                   % TsecV,
-  "io.github.jmcardon"            %% "tsec-cipher-jca"                 % TsecV,
-  "org.apache.kafka"               % "kafka-clients"                   % "2.1.0",
-  "io.monix"                      %% "monix-kafka-1x"                  % "1.0.0-RC6"
-) ++ dbDeps
+  "com.softwaremill.sttp.client3" %% "slf4j-backend"                   % SttpV
+) ++ jsonDeps ++ kafkaDeps ++ dbDeps
 
-val kafkaUploaderDeps = Seq(
-  "dev.zio" %% "zio"       % ZioV,
-  "dev.zio" %% "zio-kafka" % "0.17.1"
-)
+lazy val kafkaUploaderDeps = dbDeps ++ jsonDeps ++ kafkaDeps
 
-val commonDependencies = configDeps ++ loggingDeps ++ unitTestingStack ++ coreDeps
+lazy val commonModuleDeps = jsonDeps ++ kafkaDeps
 
 lazy val commonSettings = commonSmlBuildSettings ++ Seq(
   organization := "com.pawelzabczynski",
@@ -107,7 +113,12 @@ lazy val rootProject = (project in file("."))
   .settings(
     name := "big-data-getting-started"
   )
-  .aggregate(spark, kafka, web, realProject)
+  .aggregate(spark, kafkaUploader, web, realProject)
+
+lazy val commons = (project in file("commons"))
+  .settings(libraryDependencies := commonModuleDeps)
+  .settings(commonSettings)
+  .settings(Revolver.settings)
 
 lazy val spark: Project = (project in file("spark"))
   .settings(
@@ -117,10 +128,10 @@ lazy val spark: Project = (project in file("spark"))
   .settings(commonSettings)
   .settings(Revolver.settings)
 
-lazy val kafka: Project = (project in file("kafka-uploader"))
+lazy val kafkaUploader: Project = (project in file("kafka-uploader"))
   .settings(
     Compile / mainClass := Some("com.pawelzabczynski.KafkaApp"),
-    libraryDependencies ++= sparkDeps
+    libraryDependencies ++= kafkaUploaderDeps
   )
   .settings(commonSettings)
   .settings(Revolver.settings)
@@ -132,6 +143,7 @@ lazy val web: Project = (project in file("web"))
   )
   .settings(commonSettings)
   .settings(Revolver.settings)
+  .dependsOn(commons)
 
 lazy val realProject: Project = (project in file("real-project"))
   .settings(commonSettings)

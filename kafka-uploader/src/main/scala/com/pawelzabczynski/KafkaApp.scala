@@ -1,7 +1,5 @@
 package com.pawelzabczynski
 
-import com.pawelzabczynski.kafka.MainModule
-
 object KafkaApp {
 
   def main(args: Array[String]): Unit = {

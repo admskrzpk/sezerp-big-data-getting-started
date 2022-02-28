@@ -2,6 +2,7 @@ package com.pawelzabczynski.http
 
 import cats.implicits.{catsSyntaxApplicativeError, catsSyntaxEitherId}
 import com.pawelzabczynski.Fail
+import com.pawelzabczynski.commons.models.Id
 import com.typesafe.scalalogging.StrictLogging
 import sttp.model.StatusCode
 import sttp.tapir.{Codec, Endpoint, EndpointOutput, Schema, SchemaType, Tapir}
@@ -13,7 +14,6 @@ import monix.eval.Task
 import sttp.tapir.Codec.PlainCodec
 import tsec.common.SecureRandomId
 import com.softwaremill.tagging._
-import com.pawelzabczynski.utils.Id
 import sttp.tapir.generic.auto._
 
 class Http() extends Tapir with TapirJsonCirce with TapirSchemas with StrictLogging {

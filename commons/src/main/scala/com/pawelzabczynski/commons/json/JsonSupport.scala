@@ -1,17 +1,20 @@
-package com.pawelzabczynski.json
+package com.pawelzabczynski.commons.json
 
-import com.pawelzabczynski.device.Device
-import com.pawelzabczynski.kafka.KafkaMessages.{DeviceMessage, KafkaMessage}
+import com.pawelzabczynski.commons.models.web.Device
+import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
+import com.pawelzabczynski.commons.models.web.DeviceMessage
 import com.softwaremill.tagging.@@
 import io.circe.{Decoder, Encoder, Printer}
 import io.circe.generic.AutoDerivation
-import com.pawelzabczynski.utils.Id
+import com.pawelzabczynski.commons.models.Id
 import tsec.passwordhashers.PasswordHash
 import tsec.passwordhashers.jca.SCrypt
 import io.circe.syntax._
 import cats.syntax.functor._
 
-object JsonSupport extends AutoDerivation {
+object JsonSupport extends JsonSupport {}
+
+trait JsonSupport extends AutoDerivation {
   val noNullsPrinter: Printer = Printer.noSpaces.copy(dropNullValues = true)
 
   implicit val passwordHashEncoder: Encoder[PasswordHash[SCrypt]] =

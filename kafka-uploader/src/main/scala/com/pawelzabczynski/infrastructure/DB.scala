@@ -1,3 +1,5 @@
-package com.pawelzabczynski.infrastructure class DB {
+package com.pawelzabczynski.infrastructure
+
+class DB {
 
 }

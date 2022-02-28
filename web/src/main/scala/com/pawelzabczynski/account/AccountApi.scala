@@ -2,7 +2,8 @@ package com.pawelzabczynski.account
 
 import cats.data.NonEmptyList
 import com.pawelzabczynski.http.Http
-import com.pawelzabczynski.utils.{Id, ServerEndpoints}
+import com.pawelzabczynski.utils.ServerEndpoints
+import com.pawelzabczynski.commons.models.Id
 import com.softwaremill.tagging.@@
 import com.pawelzabczynski.account.AccountApi._
 import com.pawelzabczynski.infrastructure.JsonSupport._

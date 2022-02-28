@@ -1,10 +1,11 @@
 package com.pawelzabczynski.device
 
-import com.pawelzabczynski.utils.Id
+import com.pawelzabczynski.commons.models.Id
 import com.softwaremill.tagging.@@
 import doobie.ConnectionIO
 import com.pawelzabczynski.infrastructure.Doobie._
 import cats.syntax.functor._
+import com.pawelzabczynski.commons.models.web.Device
 import com.pawelzabczynski.account.Account.AccountId
 
 object DeviceModel {
@@ -21,5 +22,3 @@ object DeviceModel {
     sql"""SELECT id, account_id, name FROM devices WHERE account_id = $accountId AND id = $id""".stripMargin.query[Device].option
   }
 }
-
-case class Device(id: Id @@ Device, accountId: String, name: String)

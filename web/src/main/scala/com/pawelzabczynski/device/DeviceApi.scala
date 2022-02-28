@@ -7,13 +7,14 @@ import com.pawelzabczynski.utils.ServerEndpoints
 import com.pawelzabczynski.device.DeviceApi._
 import com.pawelzabczynski.infrastructure.JsonSupport._
 import sttp.tapir.generic.auto._
-import com.pawelzabczynski.utils._
+import com.pawelzabczynski.commons.models.Id
+import com.pawelzabczynski.commons.models.web.Device
 import com.softwaremill.tagging.@@
 import doobie.Transactor
 import monix.eval.Task
 import sttp.tapir.EndpointInput
 import com.pawelzabczynski.infrastructure.Doobie._
-import com.pawelzabczynski.kafka.KafkaMessages.DeviceMessage
+import com.pawelzabczynski.commons.models.web.DeviceMessage
 
 class DeviceApi(http: Http, service: DeviceService, xa: Transactor[Task]) {
 
