@@ -25,6 +25,10 @@ val configDeps = Seq(
   "com.github.pureconfig" %% "pureconfig" % "0.17.1"
 )
 
+val repositoryResolvers = Seq(
+  "twitter-repo" at "https://repo.clojars.org/"
+)
+
 val unitTestingStack = Seq(
   "org.scalatest"              %% "scalatest"       % "3.1.1"  % Test,
   "org.scalamock"              %% "scalamock"       % "4.4.0"  % Test,
@@ -44,6 +48,13 @@ val loggingDeps = Seq(
     ExclusionRule("log4j"),
     ExclusionRule("slf4j-log4j12")
   )
+)
+
+val stormDeps = Seq(
+  "org.apache.storm" % "storm-core" % "2.3.0",
+  "org.apache.storm" % "storm-kafka-client" % "2.3.0"
+
+
 )
 
 val sparkDeps = Seq("org.apache.spark" %% "spark-core" % SparkV).map(
@@ -97,7 +108,7 @@ val webDeps = Seq(
   "com.softwaremill.sttp.client3" %% "slf4j-backend"                   % SttpV
 ) ++ jsonDeps ++ kafkaDeps ++ dbDeps
 
-lazy val kafkaUploaderDeps = dbDeps ++ jsonDeps ++ kafkaDeps
+lazy val kafkaUploaderDeps = dbDeps ++ jsonDeps ++ kafkaDeps ++ stormDeps
 
 lazy val commonModuleDeps = jsonDeps ++ kafkaDeps
 
@@ -105,6 +116,7 @@ lazy val commonSettings = commonSmlBuildSettings ++ Seq(
   organization := "com.pawelzabczynski",
   scalaVersion := "2.13.2",
   libraryDependencies ++= commonDependencies,
+  resolvers ++= repositoryResolvers,
   testForkedParallel := false
 )
 
@@ -135,6 +147,7 @@ lazy val kafkaUploader: Project = (project in file("kafka-uploader"))
   )
   .settings(commonSettings)
   .settings(Revolver.settings)
+  .dependsOn(commons)
 
 lazy val web: Project = (project in file("web"))
   .settings(

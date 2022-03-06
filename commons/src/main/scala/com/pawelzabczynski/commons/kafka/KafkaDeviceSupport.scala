@@ -5,7 +5,7 @@ import com.pawelzabczynski.commons.models.web.{Device, DeviceMessage}
 import org.apache.kafka.common.serialization.{Deserializer => KafkaDeserializer, Serializer => KafkaSerializer}
 import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
 import io.circe.syntax._
-import monix.kafka.Serializer
+import monix.kafka.{Deserializer, Serializer}
 
 import java.nio.charset.StandardCharsets
 import java.util
@@ -17,6 +17,11 @@ trait KafkaDeviceSupport {
     className = "com.pawelzabczynski.commons.kafka.DeviceMessageSerializer",
     classType = classOf[DeviceMessageSerializer],
     constructor = (_: Serializer[KafkaMessage[Device]]) => deviceKafkaSerializerInstance
+  )
+  implicit val deviceKafkaMessageDeserializer: Deserializer[KafkaMessage[Device]] = Deserializer(
+    className = "com.pawelzabczynski.commons.kafka.DeviceMessageDeserializer",
+    classType = classOf[DeviceMessageDeserializer],
+    constructor = (_: Deserializer[KafkaMessage[Device]]) => deviceKafkaDeserializerInstance
   )
 }
 
