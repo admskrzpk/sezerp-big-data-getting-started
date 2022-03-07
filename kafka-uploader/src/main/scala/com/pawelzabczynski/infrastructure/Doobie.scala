@@ -1,6 +1,6 @@
 package com.pawelzabczynski.infrastructure
 
-import com.pawelzabczynski.utils.Id
+import com.pawelzabczynski.commons.models.Id
 import com.softwaremill.tagging._
 import com.typesafe.scalalogging.StrictLogging
 import doobie.util.log.{ExecFailure, ProcessingFailure, Success}

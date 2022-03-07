@@ -20,6 +20,7 @@ val Http4sV  = "0.21.23"
 val TsecV    = "0.2.1"
 val DoobieV  = "0.13.3"
 val ZioV     = "1.0.4-2"
+val StormV   = "2.3.0"
 
 val configDeps = Seq(
   "com.github.pureconfig" %% "pureconfig" % "0.17.1"
@@ -51,10 +52,14 @@ val loggingDeps = Seq(
 )
 
 val stormDeps = Seq(
-  "org.apache.storm" % "storm-core" % "2.3.0",
-  "org.apache.storm" % "storm-kafka-client" % "2.3.0"
-
-
+  "org.apache.storm"     % "storm-core"         % StormV,
+  "org.apache.storm"     % "storm-client"       % StormV,
+  "org.apache.storm"     % "storm-kafka-client" % StormV,
+  "org.apache.storm"     % "storm-server"       % StormV,
+  "org.apache.storm"     % "storm-metrics"      % StormV,
+  "com.codahale.metrics" % "metrics-core"       % "3.0.2",
+  "org.hdrhistogram"     % "HdrHistogram"       % "2.1.12",
+  "org.hamcrest"         % "java-hamcrest"      % "2.0.0.0"
 )
 
 val sparkDeps = Seq("org.apache.spark" %% "spark-core" % SparkV).map(
@@ -69,7 +74,8 @@ val coreDeps = Seq(
   "com.softwaremill.common" %% "tagging"         % "2.2.1",
   "org.postgresql"           % "postgresql"      % "42.3.1", // just for migration
   "io.github.jmcardon"      %% "tsec-password"   % TsecV,
-  "io.github.jmcardon"      %% "tsec-cipher-jca" % TsecV
+  "io.github.jmcardon"      %% "tsec-cipher-jca" % TsecV,
+  "io.micrometer"            % "micrometer-core" % "1.8.3"
 )
 
 val dbDeps = Seq(

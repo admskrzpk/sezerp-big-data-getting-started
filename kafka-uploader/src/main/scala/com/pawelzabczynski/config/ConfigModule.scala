@@ -13,6 +13,10 @@ trait ConfigModule extends StrictLogging {
          |Kafka app configuration:
          |------------------------
          |name: ${config.kafkaUploader.name}
+         |------------------------
+         |Uploader configuration:
+         |------------------------
+         |kafka consumer: ${config.kafkaUploader.kafkaSpoutDevice.kafka.consumer}
          |""".stripMargin
 
     logger.info(baseInfo)
