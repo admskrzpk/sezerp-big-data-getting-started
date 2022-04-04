@@ -16,7 +16,6 @@ import monix.execution.Scheduler.Implicits.global
 
 import scala.concurrent.duration.DurationInt
 
-
 class DeviceApiTest extends TestBase with TestEmbeddedPostgres with TestKafka with EmbeddedKafka with Eventually {
   val mainModule = new MainModule {
     override def xa: Transactor[Task] = currentDb.xa
@@ -30,8 +29,8 @@ class DeviceApiTest extends TestBase with TestEmbeddedPostgres with TestKafka wi
   "/device" when {
     "call post with correct data" should {
       "create new device related to account" in {
-        val account = createAccount()
-        val device = DeviceCreateIn(account.id, "device 1")
+        val account  = createAccount()
+        val device   = DeviceCreateIn(account.id, "device 1")
         val response = deviceCreate(device).shouldDeserializeTo[DeviceCreateOut]
 
         response.device.id should fullyMatch regex idPattern
@@ -42,10 +41,10 @@ class DeviceApiTest extends TestBase with TestEmbeddedPostgres with TestKafka wi
 
     "call get method" should {
       "return existing device for given id" in {
-        val account = createAccount()
-        val device = DeviceCreateIn(account.id, "device 1")
+        val account        = createAccount()
+        val device         = DeviceCreateIn(account.id, "device 1")
         val deviceResponse = deviceCreate(device).shouldDeserializeTo[DeviceCreateOut]
-        val response = deviceGet(account.id, deviceResponse.device.id).shouldDeserializeTo[DeviceGetOut]
+        val response       = deviceGet(account.id, deviceResponse.device.id).shouldDeserializeTo[DeviceGetOut]
 
         response.device.id shouldBe deviceResponse.device.id
         response.device.name shouldBe "device 1"
@@ -56,18 +55,19 @@ class DeviceApiTest extends TestBase with TestEmbeddedPostgres with TestKafka wi
   "/device/message" when {
     "insert valid message" should {
       "push message into kafka" in {
-          withRunningKafka {
-            val account = createAccount()
-            val device = DeviceCreateIn(account.id, "device 1")
-            val deviceResponse = deviceCreate(device).shouldDeserializeTo[DeviceCreateOut]
-            val now = testClock.now().runSyncUnsafe(1.second)
-            val messageRequest = DeviceMessageIn(account.id, message = DeviceMessage(deviceResponse.device.id, now, 10.1.some, None, None, None, None))
-            devicePushMessage(messageRequest).shouldDeserializeTo[DeviceMessageOut]
+        withRunningKafka {
+          val account        = createAccount()
+          val device         = DeviceCreateIn(account.id, "device 1")
+          val deviceResponse = deviceCreate(device).shouldDeserializeTo[DeviceCreateOut]
+          val now            = testClock.now().runSyncUnsafe(1.second)
+          val messageRequest =
+            DeviceMessageIn(account.id, message = DeviceMessage(deviceResponse.device.id, now, 10.1.some, None, None, None, None))
+          devicePushMessage(messageRequest).shouldDeserializeTo[DeviceMessageOut]
 
-            val resultMessage = EmbeddedKafka.consumeFirstMessageFrom[DeviceMessage](TestConfig.kafka.topic)
+          val resultMessage = EmbeddedKafka.consumeFirstMessageFrom[DeviceMessage](TestConfig.kafka.topic)
 
-            resultMessage.id shouldBe deviceResponse.device.id
-          }
+          resultMessage.id shouldBe deviceResponse.device.id
+        }
       }
     }
   }

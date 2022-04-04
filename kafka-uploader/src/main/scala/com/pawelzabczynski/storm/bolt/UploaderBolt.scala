@@ -12,6 +12,7 @@ import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
 import java.sql.{PreparedStatement, Time}
 import scala.collection.mutable
 import java.util.{Properties, Map => JMap}
+import java.lang.{Double => JDouble}
 
 class UploaderBolt(config: JdbcUploaderBoltConfig) extends IRichBolt with LazyLogging {
   var collector: OutputCollector                          = _
@@ -92,11 +93,11 @@ class JdbcUploader(dataSource: HikariDataSource) {
         case head :: tail =>
           acc.setString(0, head.id)
           acc.setTime(1, new Time(head.eventTime.toEpochMilli))
-          acc.setDouble(2, head.sensor1.getOrElse(null))
-          acc.setDouble(3, head.sensor2.getOrElse(null))
-          acc.setDouble(4, head.sensor3.getOrElse(null))
-          acc.setDouble(5, head.sensor4.getOrElse(null))
-          acc.setDouble(6, head.sensor5.getOrElse(null))
+          acc.setDouble(2, head.sensor1.fold(JDouble.MIN_VALUE)(v => JDouble.valueOf(v)))
+          acc.setDouble(3, head.sensor2.fold(JDouble.MIN_VALUE)(v => JDouble.valueOf(v)))
+          acc.setDouble(4, head.sensor3.fold(JDouble.MIN_VALUE)(v => JDouble.valueOf(v)))
+          acc.setDouble(5, head.sensor4.fold(JDouble.MIN_VALUE)(v => JDouble.valueOf(v)))
+          acc.setDouble(6, head.sensor5.fold(JDouble.MIN_VALUE)(v => JDouble.valueOf(v)))
           acc.addBatch()
           loop(tail, acc)
         case Nil => acc

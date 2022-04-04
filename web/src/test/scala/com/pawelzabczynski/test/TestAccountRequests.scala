@@ -8,7 +8,6 @@ import org.http4s.syntax.literals._
 import org.http4s.{Request, Response}
 import com.pawelzabczynski.infrastructure.JsonSupport._
 
-
 trait TestAccountRequests { self: TestHttpSupport =>
 
   val modules: MainModule

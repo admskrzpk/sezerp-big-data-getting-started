@@ -1,5 +1,3 @@
 package com.pawelzabczynski.infrastructure
 
-class DB {
-
-}
+class DB {}

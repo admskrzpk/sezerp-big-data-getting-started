@@ -9,8 +9,7 @@ trait ConfigModule extends StrictLogging {
   lazy val config: Config = ConfigSource.default.loadOrThrow[Config]
 
   def logConfiguration(): Unit = {
-    val baseInfo =
-      s"""
+    s"""
          |Spark app configuration:
          |------------------------
          |""".stripMargin

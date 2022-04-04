@@ -14,5 +14,4 @@ object Tuples {
 
   val defaultFields = new Fields(Topic, Partition, Message)
 
-
 }

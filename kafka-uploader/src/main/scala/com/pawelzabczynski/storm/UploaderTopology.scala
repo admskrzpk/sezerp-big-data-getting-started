@@ -14,7 +14,8 @@ object UploaderTopology {
     builder.setSpout(DeviceMessageSpout.SpoutId, deviceSpout, config.kafkaUploader.kafkaSpoutDevice.kafka.consumer.partitionsNumber)
 
     val printBolt = PrintSinkBolt.createUnsafe()
-    builder.setBolt(PrintSinkBolt.BoltId, printBolt, 1)
+    builder
+      .setBolt(PrintSinkBolt.BoltId, printBolt, 1)
       .shuffleGrouping(DeviceMessageSpout.SpoutId)
 
     builder.createTopology()

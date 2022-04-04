@@ -18,16 +18,16 @@ object DeviceMessageSpout {
       Tuples.defaultFields
     )
 
-    val configuration = new KafkaSpoutConfig.Builder[String, Array[Byte]](config.kafka.consumer.bootstrapServers.mkString(","), config.kafka.consumer.topic)
-      .setRecordTranslator(translator)
-      .setProp(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, classOf[StringDeserializer])
-      .setProp(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, classOf[ByteArrayDeserializer])
-      .setProp(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 10)
-      .setProp(ConsumerConfig.GROUP_ID_CONFIG, config.kafka.consumer.groupId)
-      .build()
+    val configuration =
+      new KafkaSpoutConfig.Builder[String, Array[Byte]](config.kafka.consumer.bootstrapServers.mkString(","), config.kafka.consumer.topic)
+        .setRecordTranslator(translator)
+        .setProp(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, classOf[StringDeserializer])
+        .setProp(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, classOf[ByteArrayDeserializer])
+        .setProp(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 10)
+        .setProp(ConsumerConfig.GROUP_ID_CONFIG, config.kafka.consumer.groupId)
+        .build()
 
     new KafkaSpout(configuration)
   }
 
 }
-

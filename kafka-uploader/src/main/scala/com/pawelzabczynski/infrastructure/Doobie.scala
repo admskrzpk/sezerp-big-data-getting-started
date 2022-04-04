@@ -11,7 +11,7 @@ import scala.concurrent.duration._
 import scala.reflect.runtime.universe.TypeTag
 
 object Doobie
-  extends doobie.Aliases
+    extends doobie.Aliases
     with doobie.hi.Modules
     with doobie.free.Modules
     with doobie.free.Types
@@ -21,7 +21,7 @@ object Doobie
     with doobie.syntax.AllSyntax
     with StrictLogging {
 
-  implicit def idMeta: Meta[Id] = implicitly[Meta[String]].asInstanceOf[Meta[Id]]
+  implicit def idMeta: Meta[Id]                        = implicitly[Meta[String]].asInstanceOf[Meta[Id]]
   implicit def taggedIdMeta[U: TypeTag]: Meta[Id @@ U] = implicitly[Meta[String]].asInstanceOf[Meta[Id @@ U]]
 
   implicit def taggedStringMeta[U: TypeTag]: Meta[String @@ U] =
@@ -31,7 +31,6 @@ object Doobie
     implicitly[Meta[String]].asInstanceOf[Meta[PasswordHash[SCrypt]]]
 
   private val SlowThreshold = 200.millis
-
 
   implicit val doobieLogHandler: LogHandler = LogHandler {
     case Success(sql, _, exec, processing) =>

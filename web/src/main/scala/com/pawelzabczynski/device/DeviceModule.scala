@@ -6,7 +6,6 @@ import com.pawelzabczynski.utils.BaseModule
 import doobie.Transactor
 import monix.eval.Task
 
-
 trait DeviceModule extends BaseModule {
 
   lazy val deviceService = new DeviceService(kafkaProducer, idGenerator, clock)

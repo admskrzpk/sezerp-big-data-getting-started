@@ -34,8 +34,8 @@ class DeviceService(kafkaProducer: MessageProducer, idGenerator: IdGenerator, cl
   def sendMessage(entity: DeviceMessageIn): ConnectionIO[Unit] = {
     for {
       maybeDevice <- DeviceModel.findBy(entity.accountId, entity.message.id)
-      _ <- maybeDevice.fold(Fail.NotFound("Device").raiseError[ConnectionIO, Device])(_.pure[ConnectionIO])
-      _ <- kafkaProducer.send(entity.message.id, entity.message).void.to[ConnectionIO]
+      _           <- maybeDevice.fold(Fail.NotFound("Device").raiseError[ConnectionIO, Device])(_.pure[ConnectionIO])
+      _           <- kafkaProducer.send(entity.message.id, entity.message).void.to[ConnectionIO]
     } yield ()
   }
 

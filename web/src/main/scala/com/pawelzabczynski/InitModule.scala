@@ -6,7 +6,7 @@ import com.pawelzabczynski.kafka.KafkaDeviceMessageProducer
 
 trait InitModule extends ConfigModule {
 
-  lazy val dataBase = new DataBase(config.db)
+  lazy val dataBase      = new DataBase(config.db)
   lazy val kafkaProducer = new KafkaDeviceMessageProducer(config.kafka)
 
 }

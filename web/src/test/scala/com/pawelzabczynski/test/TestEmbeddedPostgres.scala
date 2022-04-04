@@ -1,7 +1,7 @@
 package com.pawelzabczynski.test
 
 import com.opentable.db.postgres.embedded.EmbeddedPostgres
-import com.pawelzabczynski.config.Sensitive
+import com.pawelzabczynski.commons.models.Sensitive
 import com.pawelzabczynski.infrastructure.DataBaseConfig
 import com.typesafe.scalalogging.StrictLogging
 import org.postgresql.jdbc.PgConnection

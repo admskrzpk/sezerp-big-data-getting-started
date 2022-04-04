@@ -14,10 +14,10 @@ object KafkaUploaderApp extends LazyLogging {
 
     Using(new LocalCluster()) { _ =>
       val topology = UploaderTopology.createUnsafe(mainModule.config)
-      val conf = new Config();
+      val conf     = new Config();
       conf.setDebug(false)
       println("Starting topology...")
-      StormSubmitter.submitTopology(mainModule.config.kafkaUploader.name, conf, topology)
+      StormSubmitter.submitTopology(mainModule.config.kafkaUploader.topology.name, conf, topology)
       println("Topology started")
     }
 

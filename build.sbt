@@ -128,11 +128,20 @@ lazy val commonSettings = commonSmlBuildSettings ++ Seq(
   resolvers ++= repositoryResolvers,
   testForkedParallel := false
 )
+inThisBuild(
+   List(
+     scalaVersion := "2.13.2",
+     semanticdbEnabled := true,
+     semanticdbVersion := scalafixSemanticdb.revision
+   )
+)
 
 lazy val rootProject = (project in file("."))
   .settings(commonSettings)
   .settings(
-    name := "big-data-getting-started"
+    name := "big-data-getting-started",
+    semanticdbEnabled := true,
+    semanticdbVersion := scalafixSemanticdb.revision
   )
   .aggregate(spark, kafkaUploader, web, realProject)
 

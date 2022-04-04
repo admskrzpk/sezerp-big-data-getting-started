@@ -2,7 +2,7 @@ package com.pawelzabczynski.kafka
 
 import cats.effect.Resource
 import cats.implicits.catsSyntaxApplicativeId
-import com.pawelzabczynski.commons.models.web.{Device, DeviceMessage}
+import com.pawelzabczynski.commons.models.web.DeviceMessage
 import monix.eval.Task
 import monix.execution.Scheduler.global
 import monix.kafka.{KafkaProducer, KafkaProducerConfig}
@@ -17,7 +17,6 @@ import scala.concurrent.duration.DurationInt
 class KafkaDeviceMessageProducer(config: KafkaConfig) {
   val producerResources: Resource[Task, MessageProducer] = MessageProducer.apply(config)
 }
-
 
 final class MessageProducer(topic: String, producer: KafkaProducer[String, DeviceMessage]) {
 
@@ -37,9 +36,9 @@ final class MessageProducer(topic: String, producer: KafkaProducer[String, Devic
     producer.send(record)
   }
 
-    def close(): Task[Unit] = {
-      producer.close()
-    }
+  def close(): Task[Unit] = {
+    producer.close()
+  }
 }
 
 object MessageProducer {
@@ -66,5 +65,3 @@ object MessageProducer {
     new MessageProducer(config.topic, producer)
   }
 }
-
-

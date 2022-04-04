@@ -9,7 +9,6 @@ import org.scalatest.concurrent.Eventually
 import com.pawelzabczynski.infrastructure.JsonSupport._
 import com.pawelzabczynski.kafka.MessageProducer
 
-
 class AccountApiTest extends TestBase with TestEmbeddedPostgres with TestKafka with Eventually {
 
   val mainModule = new MainModule {

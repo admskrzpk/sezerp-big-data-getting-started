@@ -7,3 +7,4 @@ addSbtPlugin("com.typesafe.sbt"                  % "sbt-git"                 % "
 addSbtPlugin("net.virtual-void"                  % "sbt-dependency-graph"    % "0.10.0-RC1")
 addSbtPlugin("org.scalameta"                     % "sbt-scalafmt"            % "2.4.2")
 addSbtPlugin("io.github.davidmweber"             % "flyway-sbt"              % "7.4.0")
+addSbtPlugin("ch.epfl.scala"                     % "sbt-scalafix"            % "0.10.0-RC1")
