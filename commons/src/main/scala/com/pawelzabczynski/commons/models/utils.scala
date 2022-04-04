@@ -9,4 +9,8 @@ package object models {
   implicit class RichString(val s: String) extends AnyVal {
     def asId[T]: Id @@ T = s.asInstanceOf[Id @@ T]
   }
+
+  case class Sensitive(value: String) extends AnyVal {
+    override def toString: String = "***"
+  }
 }

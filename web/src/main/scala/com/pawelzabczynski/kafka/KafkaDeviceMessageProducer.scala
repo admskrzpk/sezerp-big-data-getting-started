@@ -2,13 +2,12 @@ package com.pawelzabczynski.kafka
 
 import cats.effect.Resource
 import cats.implicits.catsSyntaxApplicativeId
-import com.pawelzabczynski.commons.models.web.Device
+import com.pawelzabczynski.commons.models.web.{Device, DeviceMessage}
 import monix.eval.Task
 import monix.execution.Scheduler.global
 import monix.kafka.{KafkaProducer, KafkaProducerConfig}
 import monix.kafka.Serializer._
 import com.pawelzabczynski.commons.kafka.KafkaSerializationSupport._
-import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
 import monix.kafka.config.Acks
 import org.apache.kafka.clients.producer.{ProducerRecord, RecordMetadata}
 import org.apache.kafka.clients.producer.{KafkaProducer => ApacheKafkaProducer}
@@ -20,21 +19,21 @@ class KafkaDeviceMessageProducer(config: KafkaConfig) {
 }
 
 
-final class MessageProducer(topic: String, producer: KafkaProducer[String, KafkaMessage[Device]]) {
+final class MessageProducer(topic: String, producer: KafkaProducer[String, DeviceMessage]) {
 
-  def underlying: Task[ApacheKafkaProducer[String, KafkaMessage[Device]]] = {
+  def underlying: Task[ApacheKafkaProducer[String, DeviceMessage]] = {
     producer.underlying
   }
 
-  def send(value: KafkaMessage[Device]): Task[Option[RecordMetadata]] = {
+  def send(value: DeviceMessage): Task[Option[RecordMetadata]] = {
     producer.send(topic, value)
   }
 
-  def send(key: String, value: KafkaMessage[Device]): Task[Option[RecordMetadata]] = {
+  def send(key: String, value: DeviceMessage): Task[Option[RecordMetadata]] = {
     producer.send(topic, key, value)
   }
 
-  def send(record: ProducerRecord[String, KafkaMessage[Device]]): Task[Option[RecordMetadata]] = {
+  def send(record: ProducerRecord[String, DeviceMessage]): Task[Option[RecordMetadata]] = {
     producer.send(record)
   }
 
@@ -62,7 +61,7 @@ object MessageProducer {
       connectionsMaxIdleTime = 20.minutes
     )
 
-    val producer = KafkaProducer[String, KafkaMessage[Device]](producerConf, global)
+    val producer = KafkaProducer[String, DeviceMessage](producerConf, global)
 
     new MessageProducer(config.topic, producer)
   }

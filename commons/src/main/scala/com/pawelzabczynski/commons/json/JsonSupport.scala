@@ -1,8 +1,5 @@
 package com.pawelzabczynski.commons.json
 
-import com.pawelzabczynski.commons.models.web.Device
-import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
-import com.pawelzabczynski.commons.models.web.DeviceMessage
 import com.softwaremill.tagging.@@
 import io.circe.{Decoder, Encoder, Printer}
 import io.circe.generic.AutoDerivation
@@ -25,11 +22,4 @@ trait JsonSupport extends AutoDerivation {
 
   implicit def taggedStringEncoder[U]: Encoder[String @@ U] = Encoder.encodeString.asInstanceOf[Encoder[String @@ U]]
   implicit def taggedStringDecoder[U]: Decoder[String @@ U] = Decoder.decodeString.asInstanceOf[Decoder[String @@ U]]
-
-  implicit val encodeKafkaMessage: Encoder[KafkaMessage[Device]] = Encoder.instance {
-    case dm: DeviceMessage => dm.asJson
-  }
-  implicit val decodeKafkaMessage: Decoder[KafkaMessage[Device]] = List[Decoder[KafkaMessage[Device]]](
-    Decoder[DeviceMessage].widen
-  ).reduceLeft(_ or _)
 }

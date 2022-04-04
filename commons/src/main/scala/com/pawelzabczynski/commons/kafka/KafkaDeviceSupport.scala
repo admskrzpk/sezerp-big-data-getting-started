@@ -3,7 +3,6 @@ package com.pawelzabczynski.commons.kafka
 import com.pawelzabczynski.commons.json.JsonSupport._
 import com.pawelzabczynski.commons.models.web.{Device, DeviceMessage}
 import org.apache.kafka.common.serialization.{Deserializer => KafkaDeserializer, Serializer => KafkaSerializer}
-import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
 import io.circe.syntax._
 import monix.kafka.{Deserializer, Serializer}
 
@@ -11,31 +10,28 @@ import java.nio.charset.StandardCharsets
 import java.util
 
 trait KafkaDeviceSupport {
-  implicit val deviceKafkaSerializerInstance: KafkaSerializer[KafkaMessage[Device]]     = new DeviceMessageSerializer()
-  implicit val deviceKafkaDeserializerInstance: KafkaDeserializer[KafkaMessage[Device]] = new DeviceMessageDeserializer()
-  implicit val deviceKafkaMessageSerializer: Serializer[KafkaMessage[Device]] = Serializer(
+  implicit val deviceKafkaSerializerInstance: KafkaSerializer[DeviceMessage]     = new DeviceMessageSerializer()
+  implicit val deviceKafkaDeserializerInstance: KafkaDeserializer[DeviceMessage] = new DeviceMessageDeserializer()
+  implicit val deviceKafkaMessageSerializer: Serializer[DeviceMessage] = Serializer(
     className = "com.pawelzabczynski.commons.kafka.DeviceMessageSerializer",
     classType = classOf[DeviceMessageSerializer],
-    constructor = (_: Serializer[KafkaMessage[Device]]) => deviceKafkaSerializerInstance
+    constructor = (_: Serializer[DeviceMessage]) => deviceKafkaSerializerInstance
   )
-  implicit val deviceKafkaMessageDeserializer: Deserializer[KafkaMessage[Device]] = Deserializer(
+  implicit val deviceKafkaMessageDeserializer: Deserializer[DeviceMessage] = Deserializer(
     className = "com.pawelzabczynski.commons.kafka.DeviceMessageDeserializer",
     classType = classOf[DeviceMessageDeserializer],
-    constructor = (_: Deserializer[KafkaMessage[Device]]) => deviceKafkaDeserializerInstance
+    constructor = (_: Deserializer[DeviceMessage]) => deviceKafkaDeserializerInstance
   )
 }
 
-final class DeviceMessageSerializer extends KafkaSerializer[KafkaMessage[Device]] {
+final class DeviceMessageSerializer extends KafkaSerializer[DeviceMessage] {
   override def configure(configs: util.Map[String, _], isKey: Boolean): Unit = {
     // nothing to do
   }
 
-  override def serialize(topic: String, data: KafkaMessage[Device]): Array[Byte] = {
-    data match {
-      case msg: DeviceMessage =>
-        val serializedToStr: String = noNullsPrinter.print(msg.asJson)
+  override def serialize(topic: String, data: DeviceMessage): Array[Byte] = {
+        val serializedToStr: String = noNullsPrinter.print(data.asJson)
         serializedToStr.getBytes(StandardCharsets.UTF_8) // charset used by circe.io
-    }
   }
 
   override def close(): Unit = {
@@ -43,12 +39,12 @@ final class DeviceMessageSerializer extends KafkaSerializer[KafkaMessage[Device]
   }
 }
 
-final class DeviceMessageDeserializer extends KafkaDeserializer[KafkaMessage[Device]] {
-  override def deserialize(topic: String, data: Array[Byte]): KafkaMessage[Device] = {
+final class DeviceMessageDeserializer extends KafkaDeserializer[DeviceMessage] {
+  override def deserialize(topic: String, data: Array[Byte]): DeviceMessage = {
     val str = new String(data, StandardCharsets.UTF_8)
     io.circe.parser.parse(str) match {
       case Right(msg) =>
-        msg.as[KafkaMessage[Device]] match {
+        msg.as[DeviceMessage] match {
           case Right(dm) => dm
           case Left(de) => throw new RuntimeException(de)
         }

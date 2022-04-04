@@ -1,7 +1,6 @@
 package com.pawelzabczynski.commons.models.web
 
 import com.pawelzabczynski.commons.models.Id
-import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
 import com.softwaremill.tagging.@@
 
 import java.time.Instant
@@ -22,4 +21,4 @@ case class DeviceMessage(
                           sensor3: Option[Double],
                           sensor4: Option[Double],
                           sensor5: Option[Double]
-                        ) extends KafkaMessage[Device]
+                        )

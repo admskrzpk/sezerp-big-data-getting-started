@@ -11,8 +11,7 @@ import com.pawelzabczynski.infrastructure.JsonSupport._
 import com.pawelzabczynski.kafka.MessageProducer
 import io.github.embeddedkafka.EmbeddedKafka
 import com.pawelzabczynski.commons.kafka.KafkaSerializationSupport._
-import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
-import com.pawelzabczynski.commons.models.web.{Device, DeviceMessage}
+import com.pawelzabczynski.commons.models.web.DeviceMessage
 import monix.execution.Scheduler.Implicits.global
 
 import scala.concurrent.duration.DurationInt
@@ -65,7 +64,7 @@ class DeviceApiTest extends TestBase with TestEmbeddedPostgres with TestKafka wi
             val messageRequest = DeviceMessageIn(account.id, message = DeviceMessage(deviceResponse.device.id, now, 10.1.some, None, None, None, None))
             devicePushMessage(messageRequest).shouldDeserializeTo[DeviceMessageOut]
 
-            val resultMessage = EmbeddedKafka.consumeFirstMessageFrom[KafkaMessage[Device]](TestConfig.kafka.topic)
+            val resultMessage = EmbeddedKafka.consumeFirstMessageFrom[DeviceMessage](TestConfig.kafka.topic)
 
             resultMessage.id shouldBe deviceResponse.device.id
           }

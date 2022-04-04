@@ -5,10 +5,8 @@ import org.apache.storm.topology.{BasicOutputCollector, OutputFieldsDeclarer}
 import org.apache.storm.topology.base.BaseBasicBolt
 import org.apache.storm.tuple.Tuple
 import com.pawelzabczynski.commons.json.JsonSupport._
-import com.pawelzabczynski.commons.models.KafkaMessages.KafkaMessage
-import com.pawelzabczynski.commons.models.web.Device
-import com.pawelzabczynski.storm.spout.DeviceMessageSpout
-import com.pawelzabczynski.storm.spout.KafkaSpoutDeviceConfig.KafkaSpoutFields
+import com.pawelzabczynski.commons.models.web.DeviceMessage
+import com.pawelzabczynski.storm.spout.DeviceMessageSpout.KafkaSpoutFields
 
 import java.nio.charset.StandardCharsets
 
@@ -19,11 +17,11 @@ private class PrintSinkBolt extends BaseBasicBolt with LazyLogging {
         val str = new String(v, StandardCharsets.UTF_8)
         io.circe.parser.parse(str) match {
           case Right(msg) =>
-            msg.as[KafkaMessage[Device]] match {
+            msg.as[DeviceMessage] match {
               case Right(dm) =>
                 logger.info(s"#############################################")
                 logger.info(s"$dm")
-              case Left(de)  => logger.info(s"Cannot parse: $str")
+              case Left(de)  => logger.error(s"Cannot parse: $str", de)
             }
           case Left(pf) =>
             logger.error("Parsing failure", pf)

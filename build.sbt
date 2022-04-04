@@ -52,14 +52,17 @@ val loggingDeps = Seq(
 )
 
 val stormDeps = Seq(
-  "org.apache.storm"     % "storm-core"         % StormV,
-  "org.apache.storm"     % "storm-client"       % StormV,
-  "org.apache.storm"     % "storm-kafka-client" % StormV,
-  "org.apache.storm"     % "storm-server"       % StormV,
-  "org.apache.storm"     % "storm-metrics"      % StormV,
-  "com.codahale.metrics" % "metrics-core"       % "3.0.2",
-  "org.hdrhistogram"     % "HdrHistogram"       % "2.1.12",
-  "org.hamcrest"         % "java-hamcrest"      % "2.0.0.0"
+  "org.apache.storm"      % "storm-core"         % StormV,
+  "org.apache.storm"      % "storm-client"       % StormV,
+  "org.apache.storm"      % "storm-kafka-client" % StormV,
+  "org.apache.storm"      % "storm-server"       % StormV,
+  "org.apache.storm"      % "storm-metrics"      % StormV,
+  "org.apache.storm"      % "storm-jdbc"         % StormV,
+  "io.dropwizard.metrics" % "metrics-core"       % "3.2.6",
+  "io.dropwizard.metrics" % "metrics-graphite"   % "3.2.6",
+  "io.dropwizard.metrics" % "metrics-jvm"        % "3.2.6",
+  "org.hdrhistogram"      % "HdrHistogram"       % "2.1.12",
+  "org.hamcrest"          % "java-hamcrest"      % "2.0.0.0"
 )
 
 val sparkDeps = Seq("org.apache.spark" %% "spark-core" % SparkV).map(
